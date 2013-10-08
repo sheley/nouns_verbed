@@ -1,8 +1,19 @@
 require 'mysql2'
 require 'sequel'
+require 'sinatra'
 
 DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 
+get '/' do
+  '<html><body><h1>HALLO</h1></body></html>'
+  # form!
+end
+
+post '/new_entry' do
+  # look at request parameters
+  # write to database
+  # respond with something.
+end
 
 # verb_base = ARGV[0]
 # verb_past = ARGV[1]
