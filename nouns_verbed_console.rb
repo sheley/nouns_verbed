@@ -1,7 +1,7 @@
-require 'mysql'
+require 'mysql2'
 require 'sequel'
 
-DB = Sequel.connect({:adapter => 'mysql', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
+DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 
 
 verb_base = ARGV[0]
