@@ -1,0 +1,9 @@
+.currentmonth{  
+	 color: blue;  
+ 	text-align: center;  
+}  
+ .currentday{  
+ 	border: 1px solid black;  
+ 	color: #00FF00;  
+ 	text-align: center;  
+}
