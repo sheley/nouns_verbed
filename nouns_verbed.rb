@@ -4,7 +4,7 @@ require 'sinatra'
 
 DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 
-get '/' do
+get '/tracked_things/new' do
   '<html>
   <body>
     <h1>HALLO</h1>
@@ -23,12 +23,12 @@ get '/' do
 
 
         <input type="submit" value="Start Tracking">
+    </form>
   </body>
   </html>'
-  # form!
 end
 
-post '/new_entry' do
+post '/tracked_things/new' do
   # look at request parameters and write to DB
   DB[:tracked_things].insert_ignore << {
     noun_singular:  params[:noun_singular],
@@ -36,14 +36,41 @@ post '/new_entry' do
     verb_base:      params[:verb_base],
     verb_past:      params[:verb_past],
   }
-    redirect '/'
   # respond with something.
+    redirect '/'
 end
 
-# verb_base = ARGV[0]
-# verb_past = ARGV[1]
-# noun_singular = ARGV[2]
-# noun_plural = ARGV[3]
+get '/tracked_data/new' do
+  rows = DB[:tracked_things].all # run query, return list of rows
+  form_field_list =
+    rows.map do |row|
+      a = 'I %s' % row[:verb_past]
+      b = '<input type="text" class="input" name="count"/>'
+      c = '%s.' % row[:noun_plural]
 
-# DB["INSERT INTO tracked_things (verb_base, verb_past, noun_singular, noun_plural) VALUES(?, ?, ?, ?);",
-# 	verb_base, verb_past, noun_singular, noun_plural].all
+      "%s %s %s<br>\n" % [ a, b, c ]
+    end
+
+
+ '<html>
+  <body>
+    <h1>HEYO</h1>
+    <form method="post" action="/new_entry">
+        <label for="date">date YYYY-MM-DD</label>
+        <input type="text" class="input" name="date"/>
+        %s
+        <input type="submit" value="Add Data">
+    </form>
+  </body>
+  </html>' % form_field_list.join
+end
+
+post '/tracked_data/new' do
+  # DB[:tracked_data] << {
+  #   date: params[:date],
+  #   count: ?,
+  #   tracked_id: ?,
+  # }
+end
+
+
