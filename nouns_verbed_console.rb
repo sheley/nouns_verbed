@@ -1,6 +1,5 @@
 require 'mysql2'
 require 'sequel'
-require 'sinatra'
 
 DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 

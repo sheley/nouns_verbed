@@ -8,7 +8,7 @@ get '/tracked_things/new' do
   '<html>
   <body>
     <h1>HALLO</h1>
-    <form method="post" action="/new_entry">
+    <form method="post" action="/tracked_things/new">
         <label for="noun_singular">Noun singular</label>
         <input type="text" class="input" name="noun_singular"/>
 
@@ -40,22 +40,22 @@ post '/tracked_things/new' do
     redirect '/'
 end
 
-get '/tracked_data/new' do
+get '/tracking_data/new' do
   rows = DB[:tracked_things].all # run query, return list of rows
   form_field_list =
     rows.map do |row|
       a = 'I %s' % row[:verb_past]
-      b = '<input type="text" class="input" name="count"/>'
+      b = '<input type="text" class="input" name="count_%s"/>' % row[:id]
       c = '%s.' % row[:noun_plural]
 
       "%s %s %s<br>\n" % [ a, b, c ]
-    end
+      end
 
 
  '<html>
   <body>
     <h1>HEYO</h1>
-    <form method="post" action="/new_entry">
+    <form method="post" action="/tracking_data/new">
         <label for="date">date YYYY-MM-DD</label>
         <input type="text" class="input" name="date"/>
         %s
@@ -65,12 +65,34 @@ get '/tracked_data/new' do
   </html>' % form_field_list.join
 end
 
-post '/tracked_data/new' do
-  # DB[:tracked_data] << {
-  #   date: params[:date],
-  #   count: ?,
-  #   tracked_id: ?,
-  # }
+def insert_tracking_data(tracked_id, date, count)
+  DB[:tracking_data].on_duplicate_key_update << {
+    date: date,
+    count: count,
+    tracked_id: tracked_id,
+   }
 end
 
+def make_count_field_name(tracked_id)
+  ("count_%s" % tracked_id).to_sym
+end
+
+
+
+post '/tracking_data/new' do
+
+#look at params keys and filter them based on the prefix count. ignore all others. remove "count_" so only the id number is taken. 
+#right now we are using fake ids.
+
+  tracked_ids = DB[:tracked_things].all.map do |thing|
+                  thing[:id]
+                end
+
+  tracked_ids.map do |tracked_id|
+      insert_tracking_data(tracked_id, params[:date], params[make_count_field_name(tracked_id)])
+  end
+
+
+   "we're done here."
+end
 
