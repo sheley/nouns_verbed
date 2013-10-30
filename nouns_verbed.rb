@@ -81,12 +81,16 @@ end
 
 post '/tracking_data/new' do
 
-#look at params keys and filter them based on the prefix count. ignore all others. remove "count_" so only the id number is taken. 
-#right now we are using fake ids.
+#look at params keys and filter them based on the prefix count.
+#remove others. remove "count_" so only the id number is taken. 
+# params = {:date => '2013-10-30', :count_1 => 1, :count_2 => 2, :count_3 => 3}
 
-  tracked_ids = DB[:tracked_things].all.map do |thing|
-                  thing[:id]
-                end
+  tracked_ids =  params.keys.select do |key|
+    key.to_s.start_with?("count_")
+  end.
+    map do |key|
+    key[6..-1].to_i
+  end
 
   tracked_ids.map do |tracked_id|
       insert_tracking_data(tracked_id, params[:date], params[make_count_field_name(tracked_id)])
