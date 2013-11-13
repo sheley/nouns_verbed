@@ -1,4 +1,28 @@
 module Templates
+  def self.new_things_form
+  '<html>
+    <body>
+      <h1>HALLO</h1>
+      <form method="post" action="/tracked_things/new">
+          <label for="noun_singular">Noun singular</label>
+          <input type="text" class="input" name="noun_singular"/>
+
+          <label for="noun_plural">Noun plural</label>
+          <input type="text" class="input" name="noun_plural"/>
+
+          <label for="verb_base">Verb base form</label>
+          <input type="text" class="input" name="verb_base"/>
+
+          <label for="verb_past">Verb past tense</label>
+          <input type="text" class="input" name="verb_past"/>
+
+
+          <input type="submit" value="Start Tracking">
+      </form>
+    </body>
+    </html>'
+    end
+
   def self.new_data_form(tracked_data_input_fields)
     '<html>
     <body>
@@ -20,4 +44,8 @@ module Templates
 
     "%s %s %s<br>\n" % [ a, b, c ]
   end
+
+
+
+
 end

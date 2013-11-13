@@ -7,27 +7,7 @@ require 'templates'
 DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nounsverbed'})
 
 get '/tracked_things/new' do
-  '<html>
-  <body>
-    <h1>HALLO</h1>
-    <form method="post" action="/tracked_things/new">
-        <label for="noun_singular">Noun singular</label>
-        <input type="text" class="input" name="noun_singular"/>
-
-        <label for="noun_plural">Noun plural</label>
-        <input type="text" class="input" name="noun_plural"/>
-
-        <label for="verb_base">Verb base form</label>
-        <input type="text" class="input" name="verb_base"/>
-
-        <label for="verb_past">Verb past tense</label>
-        <input type="text" class="input" name="verb_past"/>
-
-
-        <input type="submit" value="Start Tracking">
-    </form>
-  </body>
-  </html>'
+  Templates.new_things_form
 end
 
 post '/tracked_things/new' do
