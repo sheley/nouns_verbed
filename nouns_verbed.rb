@@ -1,8 +1,10 @@
+$LOAD_PATH <<  File.expand_path('.')
 require 'mysql2'
 require 'sequel'
 require 'sinatra'
+require 'templates'
 
-DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
+DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nounsverbed'})
 
 get '/tracked_things/new' do
   '<html>
@@ -40,30 +42,21 @@ post '/tracked_things/new' do
     redirect '/'
 end
 
-get '/tracking_data/new' do
-  rows = DB[:tracked_things].all # run query, return list of rows
-  form_field_list =
-    rows.map do |row|
-      a = 'I %s' % row[:verb_past]
-      b = '<input type="text" class="input" name="count_%s"/>' % row[:id]
-      c = '%s.' % row[:noun_plural]
-
-      "%s %s %s<br>\n" % [ a, b, c ]
-      end
-
-
- '<html>
-  <body>
-    <h1>HEYO</h1>
-    <form method="post" action="/tracking_data/new">
-        <label for="date">date YYYY-MM-DD</label>
-        <input type="text" class="input" name="date"/>
-        %s
-        <input type="submit" value="Add Data">
-    </form>
-  </body>
-  </html>' % form_field_list.join
+def fetch_tracked_things
+  DB[:tracked_things].all # run query, return list of rows
 end
+
+def render_new_data_form(tracked_things)
+  form_field_list = tracked_things.map do |row|
+    Templates.tracked_thing_input_field(row)
+  end
+  Templates.new_data_form(form_field_list)
+end
+
+get '/tracking_data/new' do
+  render_new_data_form(fetch_tracked_things)
+end
+
 
 def insert_tracking_data(tracked_id, date, count)
   DB[:tracking_data].on_duplicate_key_update << {
@@ -76,8 +69,6 @@ end
 def make_count_field_name(tracked_id)
   ("count_%s" % tracked_id).to_sym
 end
-
-
 
 post '/tracking_data/new' do
 
