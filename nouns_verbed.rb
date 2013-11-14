@@ -66,8 +66,32 @@ post '/tracking_data/new' do
   tracked_ids.map do |tracked_id|
       insert_tracking_data(tracked_id, params[:date], params[make_count_field_name(tracked_id)])
   end
-
-
    "we're done here."
 end
 
+def summed_counts_per_nouns_verbed
+  DB["select verb_past, noun_plural, sum(`count`) 'count'
+    from tracked_things t inner join tracking_data d
+    on t.id = d.tracked_id
+    group by tracked_id"].all
+end
+
+def make_total_sentence(verb, count_total, noun)
+  '<p>So far I %s %s %s.</p>' % [verb, count_total, noun]
+end
+
+def render_tracked_thing_total_list(sentences)
+  '<html>
+  <body>
+    <h1>STATS</h1>
+    %s
+  </body>
+  </html>' % sentences.join
+end
+
+get '/' do
+  sentences = summed_counts_per_nouns_verbed.map do |row|
+    make_total_sentence(row[:verb_past], row[:count], row[:noun_plural])
+  end
+  render_tracked_thing_total_list(sentences)
+end
