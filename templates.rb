@@ -57,4 +57,46 @@ module Templates
     </body>
     </html>' % sentences.join
   end
+
+  def self.render_bar_graph(all_the_bars)
+    '<html>
+      <head>
+        <link rel="stylesheet" href="/styles.css">
+      </head>
+      <body>
+        <h1>Pretty Graphs</h1>
+        %s
+      </body>
+    </html>' % all_the_bars
+  end
+
+  def self.make_bars(monthly_totals_rows)
+    monthly_totals_rows.map do |row|
+      # {:total_per_month_year=>23, :year_month=>201311, :tracked_id=>1}
+      make_bar(row[:year_month], row[:total_per_month_year])
+    end.join("\n")
+  end
+
+  def self.make_month(year_month)
+    year_month.to_s
+  end
+
+  def self.make_count(total_per_month_year)
+    '<span class="count">%s</span>' % total_per_month_year.to_s
+  end
+
+  def self.make_thing
+    '<div class="thing">
+    </div>'
+  end
+
+  def self.make_bar(year_month, total)
+    '<div class="bar">
+        %s
+    </div>' % (make_month(year_month) + make_inner_bar(total) + make_count(total))
+  end
+
+  def self.make_inner_bar(length)
+    make_thing * length
+  end
 end

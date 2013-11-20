@@ -1,0 +1,16 @@
+body {
+	/*background-color: #FFB628;*/
+}
+
+.thing {
+	background-color: green;
+	height: 8px;
+	width: 8px;
+	display: inline-block;
+}
+
+.count {
+	color: #777;
+	font-size: 12px;
+	padding-left: 3px;
+}
