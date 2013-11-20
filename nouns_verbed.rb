@@ -4,7 +4,7 @@ require 'sequel'
 require 'sinatra'
 require 'templates'
 
-DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nounsverbed'})
+DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 
 get '/tracked_things/new' do
   Templates.new_things_form
