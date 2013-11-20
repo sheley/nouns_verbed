@@ -2,7 +2,7 @@ module Templates
   def self.new_things_form
   '<html>
     <body>
-      <h1>HALLO</h1>
+      <h1>What nouns would you like to verb?</h1>
       <form method="post" action="/tracked_things/new">
           <label for="noun_singular">Noun singular</label>
           <input type="text" class="input" name="noun_singular"/>
@@ -45,7 +45,16 @@ module Templates
     "%s %s %s<br>\n" % [ a, b, c ]
   end
 
+  def self.make_total_sentence(verb, count_total, noun)
+    '<p>So far I %s %s %s.</p>' % [verb, count_total, noun]
+  end
 
-
-
+  def self.render_tracked_thing_total_list(sentences)
+    '<html>
+    <body>
+      <h1>STATS</h1>
+      %s
+    </body>
+    </html>' % sentences.join
+  end
 end
