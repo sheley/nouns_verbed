@@ -33,6 +33,16 @@
 #   TOTALS
 ###########################################
 
+# total per month_year
+SELECT SUM(count) AS total_per_month_year, EXTRACT(YEAR_MONTH FROM date) 'year_month', tracked_id
+	FROM tracking_data GROUP BY tracked_id, EXTRACT(YEAR_MONTH FROM date);
+
+
+
+
+
+	
+
 
 # total days tracked
 SELECT COUNT(id) AS days_tracked, tracked_id FROM tracking_data GROUP BY tracked_id;

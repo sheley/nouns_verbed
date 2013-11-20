@@ -4,7 +4,7 @@ require 'sequel'
 require 'sinatra'
 require 'templates'
 
-DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
+DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed_mock_up'})
 
 get '/tracked_things/new' do
   Templates.new_things_form
@@ -83,4 +83,63 @@ get '/' do
   end
   Templates.render_tracked_thing_total_list(sentences)
 end
+
+get '/graphs' do
+  render_bar_graph(
+    make_bars(totals_per_month_year_per_thing)
+  )
+end
+
+
+def render_bar_graph(all_the_bars)
+  '<html>
+    <head>
+      <link rel="stylesheet" href="/styles.css">
+    </head>
+    <body>
+      <h1>Pretty Graphs</h1>
+      %s
+    </body>
+  </html>' % all_the_bars
+end
+
+def totals_per_month_year_per_thing
+  DB["SELECT SUM(count) AS total_per_month_year, EXTRACT(YEAR_MONTH FROM date) 'year_month', tracked_id
+  FROM tracking_data GROUP BY tracked_id, EXTRACT(YEAR_MONTH FROM date)"].all
+end
+
+def make_bars(monthly_totals_rows)
+  monthly_totals_rows.map do |row|
+    # {:total_per_month_year=>23, :year_month=>201311, :tracked_id=>1}
+    make_bar(row[:year_month], row[:total_per_month_year])
+  end.join("\n")
+end
+
+def make_month(year_month)
+  year_month.to_s
+end
+
+def make_count(total_per_month_year)
+  '<span class="count">%s</span>' % total_per_month_year.to_s
+end
+
+
+def make_thing
+  '<div class="thing">
+  </div>'
+end
+
+def make_bar(year_month, total)
+  '<div class="bar">
+      %s
+  </div>' % (make_month(year_month) + make_inner_bar(total) + make_count(total))
+end
+
+def make_inner_bar(length)
+  make_thing * length
+end
+
+#fantasy code
+# i need to create a number of "thing" divs equal to the total count per month_year.
+# map over this: count total per month_year --> create thing divs, wrap in bar div by month_year
 

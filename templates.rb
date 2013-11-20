@@ -26,7 +26,7 @@ module Templates
   def self.new_data_form(tracked_data_input_fields)
     '<html>
     <body>
-      <h1>HEYO</h1>
+      <h1>How many nouns did you verb?</h1>
       <form method="post" action="/tracking_data/new">
           <label for="date">date YYYY-MM-DD</label>
           <input type="text" class="input" name="date"/><br><br>
