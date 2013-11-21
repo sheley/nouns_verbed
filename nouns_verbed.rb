@@ -42,23 +42,31 @@ def make_count_field_name(tracked_id)
   ("count_%s" % tracked_id).to_sym
 end
 
-post '/tracking_data/new' do
-  #look at params keys and filter them based on the prefix count.
+
+
+
+  #look at params' keys and filter them based on the prefix count.
   #remove others. remove "count_" so only the id number is taken. 
   # params = {:date => '2013-10-30', :count_1 => 1, :count_2 => 2, :count_3 => 3}
-
-  tracked_ids =  params.keys.select do |key|
+def tracked_ids(tracking_data_params)
+  tracking_data_params.keys.select do |key|
     key.to_s.start_with?("count_")
   end.
-    map do |key|
+  map do |key|
     key[6..-1].to_i
   end
+end
 
-  tracked_ids.map do |tracked_id|
+
+post '/tracking_data/new' do
+  tracked_ids(params).map do |tracked_id|
     queries.insert_tracking_data(tracked_id, params[:date], params[make_count_field_name(tracked_id)])
   end
-   "we're done here."
+  redirect '/'
 end
+
+
+
 
 get '/' do
   sentences = queries.summed_counts_per_nouns_verbed.map do |row|
