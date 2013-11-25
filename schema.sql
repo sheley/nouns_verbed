@@ -29,7 +29,8 @@ CREATE TABLE `users` (
   `email` varchar(50) NOT NULL DEFAULT '',
   `geox` float DEFAULT NULL,
   `geoy` float DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  CONSTRAINT (`idx_unique`) UNIQUE (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -57,3 +58,14 @@ CREATE TABLE `tracking_data` (
   CONSTRAINT `tracked_id` FOREIGN KEY (`tracked_id`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
+
+#################### users
+
+CREATE TABLE `users` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(64) NOT NULL,
+  `salt` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT (`idx_unique`) UNIQUE (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

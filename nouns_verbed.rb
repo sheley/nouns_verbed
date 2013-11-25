@@ -4,8 +4,9 @@ require 'sequel'
 require 'sinatra'
 require 'templates'
 require 'queries'
+#require 'users'
 
-DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed_mock_up'})
+DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 
 def queries
   Queries.new(DB)
@@ -17,6 +18,7 @@ end
 
 post '/tracked_things/new' do
   # look at request parameters and write to DB
+  # TODO: this needs to be moved into its own function!!!
   DB[:tracked_things].insert_ignore << {
     noun_singular:  params[:noun_singular],
     noun_plural:    params[:noun_plural],
@@ -42,9 +44,6 @@ def make_count_field_name(tracked_id)
   ("count_%s" % tracked_id).to_sym
 end
 
-
-
-
   #look at params' keys and filter them based on the prefix count.
   #remove others. remove "count_" so only the id number is taken. 
   # params = {:date => '2013-10-30', :count_1 => 1, :count_2 => 2, :count_3 => 3}
@@ -57,32 +56,42 @@ def tracked_ids(tracking_data_params)
   end
 end
 
-
 post '/tracking_data/new' do
   tracked_ids(params).map do |tracked_id|
     queries.insert_tracking_data(tracked_id, params[:date], params[make_count_field_name(tracked_id)])
   end
-  redirect '/'
+  redirect '/tracking_data/stats'
 end
 
-
-
-
-get '/' do
+get '/tracking_data/stats' do
   sentences = queries.summed_counts_per_nouns_verbed.map do |row|
     Templates.make_total_sentence(row[:verb_past], row[:count], row[:noun_plural])
   end
   Templates.render_tracked_thing_total_list(sentences)
 end
 
-get '/graphs' do
+get '/tracking_data/graphs' do
   Templates.render_bar_graph(
     Templates.make_bars(queries.totals_per_month_year_per_thing)
   )
 end
 
+# get '/' do
+# ####  new_user_form here
+# end
 
-#fantasy code
-# i need to create a number of "thing" divs equal to the total count per month_year.
-# map over this: count total per month_year --> create thing divs, wrap in bar div by month_year
+# post '/new_user' do
+#   # look at request parameters and write to DB
+#   # respond with something.
+#     redirect '/tracked_things/new'
+# end
+
+# get '/login'
+# #### login form here
+# end
+
+# post '/login'
+# #### something that checks the info
+#   redirect '/tracking_data/new'
+# end
 

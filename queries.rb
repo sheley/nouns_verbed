@@ -20,7 +20,6 @@ class Queries
   end
 
   def insert_tracking_data(tracked_id, date, count)
-    puts "AAAA " + @db.inspect
     @db[:tracking_data].on_duplicate_key_update << {
       date: date,
       count: count,
