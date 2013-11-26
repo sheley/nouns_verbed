@@ -14,29 +14,41 @@ class Users
 
   def authenticate?(username, password_given)
     if user = find_user(username)
-      correct_password?(password_given, user)
+      correct_password?(password_given, user[:salt], user[:password_hash])
     else
       false 
     end
   end
 
-  def correct_password?(password_given, user)
-    true
+  def correct_password?(password_given, salt, password_hash)
+    password_hash_from_given_password = PBKDF2.new(
+      :password => password_given,
+      :salt => salt,
+      :iterations => 1000
+    ).hex_string
+    if password_hash_from_given_password == password_hash
+      true
+    else
+      false
+    end
   end
 
-  def insert_new_user(password, username)
-    @db[:users].insert_ignore << generate_user_hash(password, username)
+  def insert_new_user(username, password)
+    @db[:users] << generate_user_hash(username, password)
   end
 
-  def generate_user_hash(password, username)
-    generate_password_hash(password).merge(:username => username)
-  end
-
-  def generate_password_hash(password)
-    PBKDF2.new(
+  def generate_user_hash(username, password)
+    salt = generate_salt
+    password_hash = PBKDF2.new(
       :password => password,
-      :salt => generate_salt,
-      :iterations => 1000 ).hex_string
+      :salt => salt,
+      :iterations => 1000
+    ).hex_string
+    {
+      :username => username,
+      :salt => salt,
+      :password_hash => password_hash,
+    }
   end
 
   def generate_salt
