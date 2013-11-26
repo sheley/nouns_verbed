@@ -28,13 +28,8 @@ class Users
       ).hex_string
   end
 
-  def correct_password?(password_given, salt, saved_password_hash)
-    password_hash_from_given_password = generate_password_hash(password_given, salt)
-    if password_hash_from_given_password == saved_password_hash
-      true
-    else
-      false
-    end
+  def correct_password?(password_given, salt, saved_password_hash) 
+    generate_password_hash(password_given, salt) == saved_password_hash
   end
 
   def insert_new_user(username, password)
