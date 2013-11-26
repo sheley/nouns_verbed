@@ -20,13 +20,17 @@ class Users
     end
   end
 
-  def correct_password?(password_given, salt, password_hash)
-    password_hash_from_given_password = PBKDF2.new(
-      :password => password_given,
+  def generate_password_hash(password, salt)
+    PBKDF2.new(
+      :password => password,
       :salt => salt,
       :iterations => 1000
-    ).hex_string
-    if password_hash_from_given_password == password_hash
+      ).hex_string
+  end
+
+  def correct_password?(password_given, salt, saved_password_hash)
+    password_hash_from_given_password = generate_password_hash(password_given, salt)
+    if password_hash_from_given_password == saved_password_hash
       true
     else
       false
@@ -39,11 +43,7 @@ class Users
 
   def generate_user_hash(username, password)
     salt = generate_salt
-    password_hash = PBKDF2.new(
-      :password => password,
-      :salt => salt,
-      :iterations => 1000
-    ).hex_string
+    password_hash = generate_password_hash(password, salt)
     {
       :username => username,
       :salt => salt,
