@@ -11,8 +11,6 @@ CREATE TABLE `tracked_data` (
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-
 CREATE TABLE `tracked_things` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `noun_singular` varchar(50) NOT NULL DEFAULT '',
@@ -22,18 +20,15 @@ CREATE TABLE `tracked_things` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE `users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL DEFAULT '',
-  `email` varchar(50) NOT NULL DEFAULT '',
-  `geox` float DEFAULT NULL,
-  `geoy` float DEFAULT NULL,
+  `username` varchar(50) NOT NULL,
+  `password_hash` varchar(64) NOT NULL,
+  `salt` varchar(64) NOT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT (`idx_unique`) UNIQUE (`username`)
+  KEY `idx_unique` (`username`),
+  UNIQUE (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
 
 ################## WITHOUT USERS
 
