@@ -4,12 +4,16 @@ require 'sequel'
 require 'sinatra'
 require 'templates'
 require 'queries'
-#require 'users'
+require 'users'
 
 DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
 
 def queries
   Queries.new(DB)
+end
+
+def users
+  Users.new(DB)
 end
 
 get '/tracked_things/new' do
@@ -26,7 +30,7 @@ post '/tracked_things/new' do
     verb_past:      params[:verb_past],
   }
   # respond with something.
-    redirect '/'
+    redirect '/tracking_data/new'
 end
 
 def render_new_data_form(tracked_things)
@@ -76,15 +80,31 @@ get '/tracking_data/graphs' do
   )
 end
 
-# get '/' do
-# ####  new_user_form here
-# end
+get '/' do
+# ####  new_user_form
+  '<html>
+  <body>
+    <h1>start tracking the nouns you are verbing</h1>
+    <form method="post" action="/new_user">
 
-# post '/new_user' do
-#   # look at request parameters and write to DB
-#   # respond with something.
-#     redirect '/tracked_things/new'
-# end
+        <label for="username">username</label>
+        <input type="text" class="input" name="username"/><br><br>
+
+        <label for="password">password</label>
+        <input type="password" class="input" name="password"/><br><br>    
+
+        <input type="submit" value="Sign me up!">
+    </form>
+  </body>
+  </html>' 
+end
+
+post '/new_user' do
+# look at request parameters and write to DB
+  users.insert_new_user(params[:username], params[:password])
+  # respond with something.
+    redirect '/tracked_things/new'
+end
 
 # get '/login'
 # #### login form here

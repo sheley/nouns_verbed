@@ -11,3 +11,16 @@ noun_plural = ARGV[3]
 
 DB["INSERT INTO tracked_things (verb_base, verb_past, noun_singular, noun_plural) VALUES(?, ?, ?, ?);",
 	verb_base, verb_past, noun_singular, noun_plural].all
+
+------
+
+bundle exec irb
+
+$LOAD_PATH << File.expand_path('.')
+DB = Sequel.connect({:adapter => 'mysql2', :user => 'root', :host => 'localhost', :database => 'nouns_verbed'})
+require 'mysql2'
+require 'sequel'
+require 'sinatra'
+require 'templates'
+require 'queries'
+require 'users'

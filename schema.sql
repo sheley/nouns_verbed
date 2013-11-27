@@ -1,4 +1,4 @@
-CREATE TABLE `tracked_data` (
+CREATE TABLE `tracking_data` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `count` int(11) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE `tracked_data` (
   KEY `idx_user_id` (`user_id`),
   KEY `idx_tracked_id` (`tracked_id`),
   CONSTRAINT `tracked_id` FOREIGN KEY (`tracked_id`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tracked_things` (

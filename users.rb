@@ -1,8 +1,6 @@
 require 'pbkdf2'
 require 'securerandom'
 
-#
-
 class Users
   def initialize(db)
     @db = db
