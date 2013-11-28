@@ -49,7 +49,7 @@ def make_count_field_name(tracked_id)
 end
 
   #look at params' keys and filter them based on the prefix count.
-  #remove others. remove "count_" so only the id number is taken. 
+  #remove others. remove "count_" so only the id number is taken.
   # params = {:date => '2013-10-30', :count_1 => 1, :count_2 => 2, :count_3 => 3}
 def tracked_ids(tracking_data_params)
   tracking_data_params.keys.select do |key|
@@ -91,12 +91,13 @@ get '/' do
         <input type="text" class="input" name="username"/><br><br>
 
         <label for="password">password</label>
-        <input type="password" class="input" name="password"/><br><br>    
+        <input type="password" class="input" name="password"/><br><br>
 
         <input type="submit" value="Sign me up!">
     </form>
+    <a href="/login">I already have an account.</a>
   </body>
-  </html>' 
+  </html>'
 end
 
 post '/new_user' do
@@ -106,12 +107,44 @@ post '/new_user' do
     redirect '/tracked_things/new'
 end
 
-# get '/login'
-# #### login form here
-# end
 
-# post '/login'
+get '/login' do
+  '<html>
+  <body>
+    <h1>Please login</h1>
+    <form method="post" action="/login">
+
+        <label for="username">username</label>
+        <input type="text" class="input" name="username"/><br><br>
+
+        <label for="password">password</label>
+        <input type="password" class="input" name="password"/><br><br>
+
+        <input type="submit" value="Sign in">
+    </form>
+  </body>
+  </html>'
+end
+
+post '/login' do
 # #### something that checks the info
-#   redirect '/tracking_data/new'
-# end
+  if users.authenticate?(params[:username], params[:password]) == true
+   redirect '/tracking_data/new'
+  else
+  redirect '/login_fail'
+  end
+end
 
+get '/login_fail' do
+  '<html>
+  <body>
+    <h1>Oops. Combination not correct.</h1>
+    <a href="/login">Try again</a><br>
+    or<br>
+        <a href="/">Sign up</a>
+  </body>
+  </html>'
+end
+
+post '/login/fail' do
+end

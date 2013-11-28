@@ -14,7 +14,7 @@ class Users
     if user = find_user(username)
       correct_password?(password_given, user[:salt], user[:password_hash])
     else
-      false 
+      false
     end
   end
 
@@ -26,7 +26,7 @@ class Users
       ).hex_string
   end
 
-  def correct_password?(password_given, salt, saved_password_hash) 
+  def correct_password?(password_given, salt, saved_password_hash)
     generate_password_hash(password_given, salt) == saved_password_hash
   end
 
