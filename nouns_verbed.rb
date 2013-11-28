@@ -22,7 +22,7 @@ end
 
 post '/tracked_things/new' do
   # look at request parameters and write to DB
-  insert_tracked_thing(params[:noun_singular], params[:noun_plural], params[:verb_base], params[:verb_past])
+  queries.insert_tracked_thing(params[:noun_singular], params[:noun_plural], params[:verb_base], params[:verb_past])
   #response
     redirect '/tracking_data/new'
 end
