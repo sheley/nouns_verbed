@@ -26,4 +26,17 @@ class Queries
       tracked_id: tracked_id,
      }
   end
+
+  def insert_tracked_thing(noun_singular, noun_plural, verb_base, verb_past)
+    DB[:tracked_things].insert_ignore << {
+    noun_singular:  noun_singular,
+    noun_plural:    noun_plural,
+    verb_base:      verb_base,
+    verb_past:      verb_past,
+    }
+    DB[:users_things].insert_ignore << {
+    #current logged in user id and new tracked_thing id
+  }
+  end
+
 end

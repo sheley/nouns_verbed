@@ -22,14 +22,8 @@ end
 
 post '/tracked_things/new' do
   # look at request parameters and write to DB
-  # TODO: this needs to be moved into its own function!!!
-  DB[:tracked_things].insert_ignore << {
-    noun_singular:  params[:noun_singular],
-    noun_plural:    params[:noun_plural],
-    verb_base:      params[:verb_base],
-    verb_past:      params[:verb_past],
-  }
-  # respond with something.
+  insert_tracked_thing(params[:noun_singular], params[:noun_plural], params[:verb_base], params[:verb_past])
+  #response
     redirect '/tracking_data/new'
 end
 
