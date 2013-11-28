@@ -1,16 +1,3 @@
-CREATE TABLE `tracking_data` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `date` date NOT NULL,
-  `count` int(11) NOT NULL,
-  `tracked_id` int(11) unsigned NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idx_user_id` (`user_id`),
-  KEY `idx_tracked_id` (`tracked_id`),
-  CONSTRAINT `tracked_id` FOREIGN KEY (`tracked_id`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `tracked_things` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `noun_singular` varchar(50) NOT NULL DEFAULT '',
@@ -29,6 +16,32 @@ CREATE TABLE `users` (
   KEY `idx_unique` (`username`),
   UNIQUE (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `tracking_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `count` int(11) NOT NULL,
+  `tracked_id` int(11) unsigned NOT NULL,
+  `user_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_tracked_id` (`tracked_id`),
+  CONSTRAINT `tracked_id` FOREIGN KEY (`tracked_id`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `users_things` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id_` int(11) unsigned NOT NULL,
+  `tracked_id_` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_user_id` (`user_id`),
+  KEY `idx_tracked_id` (`tracked_id`),
+  CONSTRAINT `tracked_id` FOREIGN KEY (`tracked_id`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 ################## WITHOUT USERS
 
