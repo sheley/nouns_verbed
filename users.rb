@@ -18,14 +18,6 @@ class Users
     end
   end
 
-  def generate_password_hash(password, salt)
-    PBKDF2.new(
-      :password => password,
-      :salt => salt,
-      :iterations => 1000
-      ).hex_string
-  end
-
   def correct_password?(password_given, salt, saved_password_hash)
     generate_password_hash(password_given, salt) == saved_password_hash
   end
@@ -42,6 +34,14 @@ class Users
       :salt => salt,
       :password_hash => password_hash,
     }
+  end
+
+  def generate_password_hash(password, salt)
+    PBKDF2.new(
+      :password => password,
+      :salt => salt,
+      :iterations => 1000
+      ).hex_string
   end
 
   def generate_salt
