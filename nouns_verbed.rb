@@ -143,59 +143,24 @@ end
 post '/login/fail' do
 end
 
-# {'a' => 'b'} # => 'a=b'
-def key_valueize(hash)
-end
-
-def set_cookie(hash)
-  response.headers['Set-Cookie'] = key_valueize(hash)
-end
-
-class SmartHeaders
-  def initialize
-    @hash = {}
-  end
-
-  def add(header_name, header_value)
-    if header_name == 'Set-Cookie'
-      # header_value is a hash!! because we can!!
-      # because thi is arbitrary!!
-      @hash[header_name] = to_cookie_syntax(header_value)
-    else
-      @hash[header_name] = header_value
-    end
-  end
-
-  def to_http_syntax
-    result = ''
-    @hash.each do |header_name, header_value|
-      result << "%s: %s\n" % [ header_name, header_value ]
-    end
-    result
-  end
-
-  def to_cookie_syntax(cookie_hash)
-    result = ''
-    cookie_hash.each do |name, value|
-      result << "%s=%s\n" % [ name, value]
-    end
-    result
-  end
-end
-
 
 get '/cookie' do
-  headers = Headers.new
-  headers.add('Set-Cookie', )
-  response.headers['Set-Cookie'] = ''
-  set_cookie({'a' => 'b'})
+  response.headers['Set-Cookie'] = 'dumbcookie=worthless'
   'cookie'
 end
 
-post '/cookie' do
+get '/cookie/delete' do
+  response.headers['Set-Cookie'] = 'dumbcookie=erased; Expires-Thu, 01 Jan 2005 00:00:01 GMT; Path=/;'
+  redirect '/cookie/isitthere'
 end
 
-
+get '/cookie/isitthere' do
+  if request.env['HTTP_COOKIE'] == 'dumbcookie=worthless'
+    'The cookie is set!'
+  else
+    'WHERE IS THE COOKIE'
+  end
+end
 
 
 
