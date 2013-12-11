@@ -10,11 +10,11 @@ class Users
     @db[:users].where(:username => username).all.first
   end
 
-  def authenticate?(username, password_given)
+  def authenticate(username, password_given)
     if user = find_user(username)
-      correct_password?(password_given, user[:salt], user[:password_hash])
-    else
-      false
+      if correct_password?(password_given, user[:salt], user[:password_hash])
+        user
+      end
     end
   end
 

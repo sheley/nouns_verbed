@@ -19,6 +19,7 @@ module Templates
 
           <input type="submit" value="Start Tracking">
       </form>
+      <a href="/logout">log out</a>
     </body>
     </html>'
     end
@@ -33,6 +34,7 @@ module Templates
           %s
           <input type="submit" value="Add Data">
       </form>
+      <a href="/logout">log out</a>
     </body>
     </html>' % tracked_data_input_fields.join
   end
@@ -66,6 +68,7 @@ module Templates
       <body>
         <h1>Pretty Graphs</h1>
         %s
+        <a href="/logout">log out</a>
       </body>
     </html>' % all_the_bars
   end
