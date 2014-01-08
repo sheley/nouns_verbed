@@ -32,14 +32,23 @@ CREATE TABLE `tracking_data` (
 
 CREATE TABLE `users_things` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id_` int(11) unsigned NOT NULL,
-  `tracked_id_` int(11) unsigned NOT NULL,
+  `userid` int(11) unsigned NOT NULL,
+  `trackedid` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_user_id` (`user_id`),
-  KEY `idx_tracked_id` (`tracked_id`),
-  CONSTRAINT `tracked_id` FOREIGN KEY (`tracked_id`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idx_userid` (`userid`),
+  KEY `idx_trackedid` (`trackedid`),
+  CONSTRAINT `trackedid` FOREIGN KEY (`trackedid`) REFERENCES `tracked_things` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `userid` FOREIGN KEY (`userid`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
+
+
+
+
 
 
 
